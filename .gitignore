@@ -73,3 +73,10 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Python virtual environment
+backend/gitdocs/
+
+# Python cache
+__pycache__/
+*.py[cod]
