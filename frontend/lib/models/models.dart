@@ -105,6 +105,7 @@ class HistoryItem {
   final AppSettings settings;
   final String url;
   final int timestamp;
+  final bool saved;
 
   const HistoryItem({
     required this.readme,
@@ -113,7 +114,27 @@ class HistoryItem {
     required this.settings,
     required this.url,
     required this.timestamp,
+    this.saved = false,
   });
+
+  HistoryItem copyWith({
+    String? readme,
+    Map<String, dynamic>? repoData,
+    Map<String, dynamic>? langData,
+    AppSettings? settings,
+    String? url,
+    int? timestamp,
+    bool? saved,
+  }) =>
+      HistoryItem(
+        readme: readme ?? this.readme,
+        repoData: repoData ?? this.repoData,
+        langData: langData ?? this.langData,
+        settings: settings ?? this.settings,
+        url: url ?? this.url,
+        timestamp: timestamp ?? this.timestamp,
+        saved: saved ?? this.saved,
+      );
 
   Map<String, dynamic> toJson() => {
         'readme': readme,
@@ -122,6 +143,7 @@ class HistoryItem {
         'settings': settings.toJson(),
         'url': url,
         'timestamp': timestamp,
+        'saved': saved,
       };
 
   factory HistoryItem.fromJson(Map<String, dynamic> json) => HistoryItem(
@@ -132,6 +154,7 @@ class HistoryItem {
             Map<String, dynamic>.from(json['settings'] ?? {})),
         url: json['url'] ?? '',
         timestamp: json['timestamp'] ?? 0,
+        saved: json['saved'] ?? false,
       );
 }
 

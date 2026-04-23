@@ -8,6 +8,7 @@ import 'screens/new_readme_screen.dart';
 import 'screens/result_screen.dart';
 import 'screens/templates_screen.dart';
 import 'screens/settings_screen.dart';
+import 'screens/saved_screen.dart';
 import 'widgets/sidebar.dart';
 import 'l10n/strings.dart';
 import 'l10n/strings_provider.dart';
@@ -55,6 +56,7 @@ class _GitDocsAppState extends State<GitDocsApp> {
                     timestamp: DateTime.now().millisecondsSinceEpoch,
                   );
                   setState(() => _result = item);
+                  _addToHistory(item);
                   ctx.go('/result');
                 },
               ),
@@ -65,7 +67,7 @@ class _GitDocsAppState extends State<GitDocsApp> {
               builder: (ctx, state) => ResultScreen(
                 result: _result!,
                 onBack: () => ctx.go('/'),
-                onSave: () => _addToHistory(_result!),
+                onSave: () => _markSaved(_result!),
               ),
             ),
             GoRoute(
@@ -82,6 +84,17 @@ class _GitDocsAppState extends State<GitDocsApp> {
               builder: (ctx, state) => SettingsScreen(
                 settings: _settings,
                 onChanged: _saveSettings,
+              ),
+            ),
+            GoRoute(
+              path: '/saved',
+              builder: (ctx, state) => SavedScreen(
+                saved: _history.where((h) => h.saved).toList(),
+                onOpen: (item) {
+                  setState(() => _result = item);
+                  ctx.go('/result');
+                },
+                onUnsave: (item) => _unmarkSaved(item),
               ),
             ),
           ],
@@ -125,6 +138,27 @@ class _GitDocsAppState extends State<GitDocsApp> {
     if (!exists) _saveHistory([..._history, item]);
   }
 
+  void _markSaved(HistoryItem item) {
+    final updated = _history
+        .map((h) => h.timestamp == item.timestamp ? h.copyWith(saved: true) : h)
+        .toList();
+    if (!_history.any((h) => h.timestamp == item.timestamp)) {
+      _saveHistory([..._history, item.copyWith(saved: true)]);
+    } else {
+      _saveHistory(updated);
+    }
+    if (_result?.timestamp == item.timestamp) {
+      setState(() => _result = _result!.copyWith(saved: true));
+    }
+  }
+
+  void _unmarkSaved(HistoryItem item) {
+    final updated = _history
+        .map((h) => h.timestamp == item.timestamp ? h.copyWith(saved: false) : h)
+        .toList();
+    _saveHistory(updated);
+  }
+
   Future<void> _setUiLang(String lang) async {
     setState(() => _uiLang = lang);
     final prefs = await SharedPreferences.getInstance();
@@ -140,6 +174,7 @@ class _GitDocsAppState extends State<GitDocsApp> {
       '/result': strings.get('page_result'),
       '/templates': strings.get('page_templates'),
       '/settings': strings.get('page_settings'),
+      '/saved': strings.get('page_saved'),
     };
 
     return Scaffold(
@@ -148,6 +183,7 @@ class _GitDocsAppState extends State<GitDocsApp> {
             Sidebar(
               currentPath: currentPath,
               history: _history,
+              savedCount: _history.where((h) => h.saved).length,
               onNavigate: (path) => context.go(path),
               onOpenHistory: (item) {
                 setState(() => _result = item);

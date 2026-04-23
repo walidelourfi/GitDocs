@@ -26,7 +26,21 @@ class ResultScreen extends StatefulWidget {
 class _ResultScreenState extends State<ResultScreen> {
   String _tab = 'preview';
   bool _copied = false;
-  bool _saved = false;
+  late bool _saved;
+
+  @override
+  void initState() {
+    super.initState();
+    _saved = widget.result.saved;
+  }
+
+  @override
+  void didUpdateWidget(ResultScreen old) {
+    super.didUpdateWidget(old);
+    if (widget.result.saved != old.result.saved) {
+      _saved = widget.result.saved;
+    }
+  }
 
   void _copy() {
     Clipboard.setData(ClipboardData(text: widget.result.readme));
@@ -38,8 +52,6 @@ class _ResultScreenState extends State<ResultScreen> {
   void _save() {
     widget.onSave();
     setState(() => _saved = true);
-    Future.delayed(
-        const Duration(seconds: 2), () => setState(() => _saved = false));
   }
 
   @override

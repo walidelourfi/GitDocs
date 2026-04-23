@@ -88,6 +88,11 @@ class AppStrings {
       'settings_save_sub': 'S\'aplicarà a totes les generacions futures.',
       'settings_save_btn': 'Desar',
       'settings_saved_btn': 'Desat',
+      'nav_saved': 'Guardats',
+      'page_saved': 'Guardats',
+      'saved_empty_title': 'Sense guardats encara',
+      'saved_empty_sub': 'Guarda un README per veure\'l aquí.',
+      'saved_unsave': 'Eliminar de guardats',
     },
     'es': {
       'nav_new': 'Nuevo README',
@@ -166,6 +171,11 @@ class AppStrings {
       'settings_save_sub': 'Se aplicará a todas las generaciones futuras.',
       'settings_save_btn': 'Guardar',
       'settings_saved_btn': 'Guardado',
+      'nav_saved': 'Guardados',
+      'page_saved': 'Guardados',
+      'saved_empty_title': 'Sin guardados aún',
+      'saved_empty_sub': 'Guarda un README para verlo aquí.',
+      'saved_unsave': 'Eliminar de guardados',
     },
     'en': {
       'nav_new': 'New README',
@@ -244,6 +254,11 @@ class AppStrings {
       'settings_save_sub': 'Will be applied to all future generations.',
       'settings_save_btn': 'Save',
       'settings_saved_btn': 'Saved',
+      'nav_saved': 'Saved',
+      'page_saved': 'Saved',
+      'saved_empty_title': 'No saved items yet',
+      'saved_empty_sub': 'Save a README to see it here.',
+      'saved_unsave': 'Remove from saved',
     },
   };
 

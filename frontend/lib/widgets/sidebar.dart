@@ -7,6 +7,7 @@ import '../theme.dart';
 class Sidebar extends StatelessWidget {
   final String currentPath;
   final List<HistoryItem> history;
+  final int savedCount;
   final ValueChanged<String> onNavigate;
   final ValueChanged<HistoryItem> onOpenHistory;
 
@@ -14,6 +15,7 @@ class Sidebar extends StatelessWidget {
     super.key,
     required this.currentPath,
     required this.history,
+    required this.savedCount,
     required this.onNavigate,
     required this.onOpenHistory,
   });
@@ -88,6 +90,13 @@ class Sidebar extends StatelessWidget {
                   label: s.get('nav_templates'),
                   active: currentPath == '/templates',
                   onTap: () => onNavigate('/templates'),
+                ),
+                _NavButton(
+                  icon: Icons.bookmark_outline,
+                  label: s.get('nav_saved'),
+                  active: currentPath == '/saved',
+                  badge: savedCount > 0 ? '$savedCount' : null,
+                  onTap: () => onNavigate('/saved'),
                 ),
               ],
             ),
@@ -258,12 +267,14 @@ class _NavButton extends StatefulWidget {
   final IconData icon;
   final String label;
   final bool active;
+  final String? badge;
   final VoidCallback onTap;
 
   const _NavButton({
     required this.icon,
     required this.label,
     required this.active,
+    this.badge,
     required this.onTap,
   });
 
@@ -299,12 +310,27 @@ class _NavButtonState extends State<_NavButton> {
                   size: 18,
                   color: widget.active ? kOnSurface : kOnSurfaceMuted),
               const SizedBox(width: 9),
-              Text(widget.label,
-                  style: TextStyle(
-                      fontSize: 13,
-                      fontWeight:
-                          widget.active ? FontWeight.w600 : FontWeight.w500,
-                      color: widget.active ? kOnSurface : kOnSurfaceMuted)),
+              Expanded(
+                child: Text(widget.label,
+                    style: TextStyle(
+                        fontSize: 13,
+                        fontWeight:
+                            widget.active ? FontWeight.w600 : FontWeight.w500,
+                        color: widget.active ? kOnSurface : kOnSurfaceMuted)),
+              ),
+              if (widget.badge != null)
+                Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+                  decoration: BoxDecoration(
+                      color: kAccent.withValues(alpha: 0.12),
+                      borderRadius: BorderRadius.circular(999)),
+                  child: Text(widget.badge!,
+                      style: const TextStyle(
+                          fontSize: 10,
+                          fontWeight: FontWeight.w700,
+                          color: kAccent)),
+                ),
             ],
           ),
         ),
