@@ -148,8 +148,7 @@ class _HistoryCardState extends State<_HistoryCard> {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                            item.repoData['description'] ?? item.url,
+                        Text(item.repoData['description'] ?? item.url,
                             style: const TextStyle(
                                 fontSize: 12, color: kOnSurfaceMuted),
                             overflow: TextOverflow.ellipsis),
@@ -181,8 +180,7 @@ class _HistoryCardState extends State<_HistoryCard> {
               ),
               const SizedBox(height: 10),
               Text(
-                item.readme.substring(
-                    0, item.readme.length.clamp(0, 180)),
+                item.readme.substring(0, item.readme.length.clamp(0, 180)),
                 style: TextStyle(
                     fontSize: 12,
                     color: kOnSurfaceMuted,
@@ -199,25 +197,21 @@ class _HistoryCardState extends State<_HistoryCard> {
   }
 
   Widget _badge(String label) => Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-        decoration: BoxDecoration(
-            color: kAccent.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(999)),
-        child: Text(label,
-            style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: kAccent)));
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+      decoration: BoxDecoration(
+          color: kAccent.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(999)),
+      child: Text(label,
+          style: const TextStyle(
+              fontSize: 10, fontWeight: FontWeight.w700, color: kAccent)));
 
   Widget _badgeMuted(String label) => Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-        decoration: BoxDecoration(
-            color: kSurfaceLow, borderRadius: BorderRadius.circular(999)),
-        child: Text(label,
-            style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: kOnSurfaceMuted)));
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+      decoration: BoxDecoration(
+          color: kSurfaceLow, borderRadius: BorderRadius.circular(999)),
+      child: Text(label,
+          style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: kOnSurfaceMuted)));
 }

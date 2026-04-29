@@ -46,7 +46,8 @@ class _GitDocsAppState extends State<GitDocsApp> {
               path: '/',
               builder: (ctx, state) => NewReadmeScreen(
                 settings: _settings,
-                onResult: (readme, repoData, langData, settings, url) async {
+                onResult:
+                    (readme, repoData, langData, settings, url, aiMeta) async {
                   final item = HistoryItem(
                     readme: readme,
                     repoData: repoData,
@@ -54,6 +55,7 @@ class _GitDocsAppState extends State<GitDocsApp> {
                     settings: settings,
                     url: url,
                     timestamp: DateTime.now().millisecondsSinceEpoch,
+                    aiMeta: aiMeta,
                   );
                   setState(() => _result = item);
                   _addToHistory(item);
@@ -154,7 +156,8 @@ class _GitDocsAppState extends State<GitDocsApp> {
 
   void _unmarkSaved(HistoryItem item) {
     final updated = _history
-        .map((h) => h.timestamp == item.timestamp ? h.copyWith(saved: false) : h)
+        .map(
+            (h) => h.timestamp == item.timestamp ? h.copyWith(saved: false) : h)
         .toList();
     _saveHistory(updated);
   }
@@ -178,76 +181,74 @@ class _GitDocsAppState extends State<GitDocsApp> {
     };
 
     return Scaffold(
-        body: Row(
-          children: [
-            Sidebar(
-              currentPath: currentPath,
-              history: _history,
-              savedCount: _history.where((h) => h.saved).length,
-              onNavigate: (path) => context.go(path),
-              onOpenHistory: (item) {
-                setState(() => _result = item);
-                context.go('/result');
-              },
-            ),
-            Expanded(
-              child: Column(
-                children: [
-                  Container(
-                    height: 60,
-                    padding: const EdgeInsets.symmetric(horizontal: 32),
-                    decoration: BoxDecoration(
-                      color: kBg.withValues(alpha: 0.9),
-                      border:
-                          const Border(bottom: BorderSide(color: kSurfaceHigh)),
-                    ),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        if (currentPath == '/')
-                          _LangDropdown(
-                              value: _uiLang, onChanged: _setUiLang)
-                        else
-                          Row(
-                            children: [
-                              Text(pageTitles[currentPath] ?? '',
-                                  style: GoogleFonts.manrope(
-                                      fontSize: 15,
-                                      fontWeight: FontWeight.w700,
-                                      color: kOnSurface)),
-                              if (currentPath == '/result' &&
-                                  _result != null) ...[
-                                const SizedBox(width: 8),
-                                Container(
-                                  padding: const EdgeInsets.symmetric(
-                                      horizontal: 9, vertical: 3),
-                                  decoration: BoxDecoration(
-                                    color: const Color(0xFF22C55E)
-                                        .withValues(alpha: 0.1),
-                                    borderRadius: BorderRadius.circular(999),
-                                  ),
-                                  child: Text(strings.get('badge_generated'),
-                                      style: const TextStyle(
-                                          fontSize: 10,
-                                          fontWeight: FontWeight.w700,
-                                          color: Color(0xFF16A34A),
-                                          letterSpacing: 0.8)),
-                                ),
-                              ],
-                            ],
-                          ),
-                        if (currentPath != '/')
-                          _LangDropdown(
-                              value: _uiLang, onChanged: _setUiLang),
-                      ],
-                    ),
+      body: Row(
+        children: [
+          Sidebar(
+            currentPath: currentPath,
+            history: _history,
+            savedCount: _history.where((h) => h.saved).length,
+            onNavigate: (path) => context.go(path),
+            onOpenHistory: (item) {
+              setState(() => _result = item);
+              context.go('/result');
+            },
+          ),
+          Expanded(
+            child: Column(
+              children: [
+                Container(
+                  height: 60,
+                  padding: const EdgeInsets.symmetric(horizontal: 32),
+                  decoration: BoxDecoration(
+                    color: kBg.withValues(alpha: 0.9),
+                    border:
+                        const Border(bottom: BorderSide(color: kSurfaceHigh)),
                   ),
-                  Expanded(child: child),
-                ],
-              ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      if (currentPath == '/')
+                        _LangDropdown(value: _uiLang, onChanged: _setUiLang)
+                      else
+                        Row(
+                          children: [
+                            Text(pageTitles[currentPath] ?? '',
+                                style: GoogleFonts.manrope(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                    color: kOnSurface)),
+                            if (currentPath == '/result' &&
+                                _result != null) ...[
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                    horizontal: 9, vertical: 3),
+                                decoration: BoxDecoration(
+                                  color: const Color(0xFF22C55E)
+                                      .withValues(alpha: 0.1),
+                                  borderRadius: BorderRadius.circular(999),
+                                ),
+                                child: Text(strings.get('badge_generated'),
+                                    style: const TextStyle(
+                                        fontSize: 10,
+                                        fontWeight: FontWeight.w700,
+                                        color: Color(0xFF16A34A),
+                                        letterSpacing: 0.8)),
+                              ),
+                            ],
+                          ],
+                        ),
+                      if (currentPath != '/')
+                        _LangDropdown(value: _uiLang, onChanged: _setUiLang),
+                    ],
+                  ),
+                ),
+                Expanded(child: child),
+              ],
             ),
-          ],
-        ),
+          ),
+        ],
+      ),
     );
   }
 

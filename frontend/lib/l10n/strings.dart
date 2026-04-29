@@ -22,7 +22,8 @@ class AppStrings {
       'page_settings': 'Configuració',
       'badge_generated': 'Generat',
       // NewReadme
-      'new_subtitle': 'Enganxa la URL d\'un repositori públic de GitHub i genera un README professional amb IA.',
+      'new_subtitle':
+          'Enganxa la URL d\'un repositori públic de GitHub i genera un README professional amb IA.',
       'url_label': 'URL del Repositori',
       'url_placeholder': 'https://github.com/usuari/repositori',
       'examples': 'Exemples:',
@@ -45,8 +46,10 @@ class AppStrings {
       'none': 'Cap',
       'minimal': 'Mínim',
       'vibrant': 'Vibrant',
-      'error_url': 'Introdueix una URL vàlida de GitHub (ex: https://github.com/usuari/repo)',
-      'error_backend': 'Error en generar. Verifica que el backend estigui actiu.',
+      'error_url':
+          'Introdueix una URL vàlida de GitHub (ex: https://github.com/usuari/repo)',
+      'error_backend':
+          'Error en generar. Verifica que el backend estigui actiu.',
       'open_md_title': 'Obre un fitxer .md',
       'open_md_sub': 'Visualitza i edita un fitxer Markdown local',
       'open_md_btn': 'Explorar',
@@ -67,7 +70,8 @@ class AppStrings {
       'history_clear': 'Netejar',
       // Templates
       'templates_title': 'Plantilles',
-      'templates_sub': 'Tria l\'estructura base més adequada per al teu projecte.',
+      'templates_sub':
+          'Tria l\'estructura base més adequada per al teu projecte.',
       'templates_use': 'Usar plantilla',
       // Settings
       'settings_title': 'Configuració',
@@ -109,7 +113,8 @@ class AppStrings {
       'page_templates': 'Plantillas',
       'page_settings': 'Configuración',
       'badge_generated': 'Generado',
-      'new_subtitle': 'Pega la URL de un repositorio público de GitHub y genera un README profesional con IA.',
+      'new_subtitle':
+          'Pega la URL de un repositorio público de GitHub y genera un README profesional con IA.',
       'url_label': 'URL del Repositorio',
       'url_placeholder': 'https://github.com/usuario/repositorio',
       'examples': 'Ejemplos:',
@@ -132,7 +137,8 @@ class AppStrings {
       'none': 'Ninguno',
       'minimal': 'Mínimo',
       'vibrant': 'Vibrante',
-      'error_url': 'Ingresa una URL válida de GitHub (ej: https://github.com/usuario/repo)',
+      'error_url':
+          'Ingresa una URL válida de GitHub (ej: https://github.com/usuario/repo)',
       'error_backend': 'Error al generar. Verifica que el backend esté activo.',
       'open_md_title': 'Abrir un archivo .md',
       'open_md_sub': 'Visualiza y edita un archivo Markdown local',
@@ -151,7 +157,8 @@ class AppStrings {
       'history_generated_pl': 'generados',
       'history_clear': 'Limpiar',
       'templates_title': 'Plantillas',
-      'templates_sub': 'Elige la estructura base más adecuada para tu proyecto.',
+      'templates_sub':
+          'Elige la estructura base más adecuada para tu proyecto.',
       'templates_use': 'Usar plantilla',
       'settings_title': 'Configuración',
       'settings_sub': 'Parámetros globales aplicados a todas las generaciones.',
@@ -192,7 +199,8 @@ class AppStrings {
       'page_templates': 'Templates',
       'page_settings': 'Settings',
       'badge_generated': 'Generated',
-      'new_subtitle': 'Paste the URL of a public GitHub repository and generate a professional README with AI.',
+      'new_subtitle':
+          'Paste the URL of a public GitHub repository and generate a professional README with AI.',
       'url_label': 'Repository URL',
       'url_placeholder': 'https://github.com/user/repository',
       'examples': 'Examples:',
@@ -215,7 +223,8 @@ class AppStrings {
       'none': 'None',
       'minimal': 'Minimal',
       'vibrant': 'Vibrant',
-      'error_url': 'Enter a valid GitHub URL (e.g. https://github.com/user/repo)',
+      'error_url':
+          'Enter a valid GitHub URL (e.g. https://github.com/user/repo)',
       'error_backend': 'Generation error. Make sure the backend is running.',
       'open_md_title': 'Open a .md file',
       'open_md_sub': 'View and edit a local Markdown file',
@@ -234,7 +243,8 @@ class AppStrings {
       'history_generated_pl': 'generated',
       'history_clear': 'Clear',
       'templates_title': 'Templates',
-      'templates_sub': 'Choose the base structure best suited for your project.',
+      'templates_sub':
+          'Choose the base structure best suited for your project.',
       'templates_use': 'Use template',
       'settings_title': 'Settings',
       'settings_sub': 'Global parameters applied to all generations.',
@@ -262,6 +272,5 @@ class AppStrings {
     },
   };
 
-  String get(String key) =>
-      _s[langCode]?[key] ?? _s['en']?[key] ?? key;
+  String get(String key) => _s[langCode]?[key] ?? _s['en']?[key] ?? key;
 }

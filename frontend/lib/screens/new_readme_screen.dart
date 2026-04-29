@@ -14,7 +14,8 @@ class NewReadmeScreen extends StatefulWidget {
       Map<String, dynamic> repoData,
       Map<String, dynamic> langData,
       AppSettings settings,
-      String url) onResult;
+      String url,
+      Map<String, dynamic> aiMeta) onResult;
 
   const NewReadmeScreen(
       {super.key, required this.settings, required this.onResult});
@@ -53,8 +54,8 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
       final parsed = parseGithubUrl(_urlCtrl.text);
       if (parsed == null) return;
       try {
-        final data = await ApiService.fetchRepo(
-            parsed['owner']!, parsed['repo']!);
+        final data =
+            await ApiService.fetchRepo(parsed['owner']!, parsed['repo']!);
         if (mounted) setState(() => _repoPreview = data);
       } catch (_) {}
     });
@@ -73,7 +74,8 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
     final name = file.name.endsWith('.md')
         ? file.name.substring(0, file.name.length - 3)
         : file.name;
-    await widget.onResult(content, {'full_name': name}, {}, _local, file.name);
+    await widget.onResult(
+        content, {'full_name': name}, {}, _local, file.name, {});
   }
 
   Future<void> _generate() async {
@@ -112,7 +114,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
         settings: _local,
       );
 
-      final readme = await ApiService.generateReadme(
+      final aiResponse = await ApiService.generateReadme(
         prompt: prompt,
         repoData: repoData,
         langData: langData,
@@ -120,8 +122,9 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
         aiModel: _aiModel,
       );
 
+      final readme = aiResponse['readme'] as String;
       await widget.onResult(
-          readme, repoData, langData, _local, _urlCtrl.text);
+          readme, repoData, langData, _local, _urlCtrl.text, aiResponse);
     } catch (e) {
       setState(() => _error = e.toString().replaceFirst('Exception: ', ''));
     } finally {
@@ -168,8 +171,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                             controller: _urlCtrl,
                             decoration: InputDecoration(
                               hintText: s.get('url_placeholder'),
-                              prefixIcon:
-                                  const Icon(Icons.link, size: 18),
+                              prefixIcon: const Icon(Icons.link, size: 18),
                               filled: true,
                               fillColor: kSurfaceLow,
                               border: OutlineInputBorder(
@@ -199,12 +201,20 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                             child: DropdownButton<String>(
                               value: _aiModel,
                               items: const [
-                                DropdownMenuItem(value: 'gemini', child: Text('Gemini')),
-                                DropdownMenuItem(value: 'grok', child: Text('Grok')),
-                                DropdownMenuItem(value: 'claude', child: Text('Claude')),
+                                DropdownMenuItem(
+                                    value: 'gemini', child: Text('Gemini')),
+                                DropdownMenuItem(
+                                    value: 'grok', child: Text('Grok')),
+                                DropdownMenuItem(
+                                    value: 'claude', child: Text('Claude')),
                               ],
-                              onChanged: _loading ? null : (v) => setState(() => _aiModel = v!),
-                              style: const TextStyle(fontSize: 13, color: kOnSurface, fontWeight: FontWeight.w600),
+                              onChanged: _loading
+                                  ? null
+                                  : (v) => setState(() => _aiModel = v!),
+                              style: const TextStyle(
+                                  fontSize: 13,
+                                  color: kOnSurface,
+                                  fontWeight: FontWeight.w600),
                             ),
                           ),
                         ),
@@ -226,13 +236,14 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                                   width: 14,
                                   height: 14,
                                   child: CircularProgressIndicator(
-                                      strokeWidth: 2,
-                                      color: Colors.white))
+                                      strokeWidth: 2, color: Colors.white))
                               : const Icon(Icons.auto_awesome, size: 16),
-                          label: Text(_loading ? s.get('generating') : s.get('generate'),
+                          label: Text(
+                              _loading
+                                  ? s.get('generating')
+                                  : s.get('generate'),
                               style: GoogleFonts.manrope(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: 14)),
+                                  fontWeight: FontWeight.w700, fontSize: 14)),
                         ),
                       ],
                     ),
@@ -252,11 +263,9 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                             const SizedBox(width: 12),
                             Expanded(
                               child: Column(
-                                crossAxisAlignment:
-                                    CrossAxisAlignment.start,
+                                crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
-                                  Text(
-                                      _repoPreview!['full_name'] ?? '',
+                                  Text(_repoPreview!['full_name'] ?? '',
                                       style: const TextStyle(
                                           fontSize: 13,
                                           fontWeight: FontWeight.w600),
@@ -265,8 +274,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                                       _repoPreview!['description'] ??
                                           s.get('no_description'),
                                       style: const TextStyle(
-                                          fontSize: 11,
-                                          color: kOnSurfaceMuted),
+                                          fontSize: 11, color: kOnSurfaceMuted),
                                       overflow: TextOverflow.ellipsis),
                                 ],
                               ),
@@ -278,14 +286,11 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                                 Text(
                                     '${_repoPreview!['stargazers_count'] ?? 0}',
                                     style: const TextStyle(
-                                        fontSize: 11,
-                                        color: kOnSurfaceMuted)),
+                                        fontSize: 11, color: kOnSurfaceMuted)),
                                 if (_repoPreview!['language'] != null) ...[
                                   const SizedBox(width: 8),
-                                  _badge(
-                                      _repoPreview!['language'],
-                                      kAccent.withValues(alpha: 0.1),
-                                      kAccent),
+                                  _badge(_repoPreview!['language'],
+                                      kAccent.withValues(alpha: 0.1), kAccent),
                                 ]
                               ],
                             ),
@@ -307,8 +312,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                         ...examples.map((ex) => GestureDetector(
                               onTap: () => _urlCtrl.text = ex,
                               child: Text(
-                                  ex.replaceAll(
-                                      'https://github.com/', ''),
+                                  ex.replaceAll('https://github.com/', ''),
                                   style: const TextStyle(
                                       fontSize: 11,
                                       color: kAccent,
@@ -333,8 +337,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                             Expanded(
                               child: Text(_error,
                                   style: const TextStyle(
-                                      fontSize: 13,
-                                      color: Color(0xFFDC2626))),
+                                      fontSize: 13, color: Color(0xFFDC2626))),
                             ),
                           ],
                         ),
@@ -353,8 +356,8 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 14),
                       child: Text('o',
-                          style: TextStyle(
-                              fontSize: 12, color: kOnSurfaceFaint)),
+                          style:
+                              TextStyle(fontSize: 12, color: kOnSurfaceFaint)),
                     ),
                     const Expanded(child: Divider(color: kSurfaceHigh)),
                   ],
@@ -380,8 +383,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                           children: [
                             Text(s.get('open_md_title'),
                                 style: GoogleFonts.manrope(
-                                    fontSize: 13,
-                                    fontWeight: FontWeight.w700)),
+                                    fontSize: 13, fontWeight: FontWeight.w700)),
                             Text(s.get('open_md_sub'),
                                 style: const TextStyle(
                                     fontSize: 11, color: kOnSurfaceMuted)),
@@ -390,8 +392,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                       ),
                       OutlinedButton.icon(
                         onPressed: _pickMdFile,
-                        icon:
-                            const Icon(Icons.folder_open_outlined, size: 15),
+                        icon: const Icon(Icons.folder_open_outlined, size: 15),
                         label: Text(s.get('open_md_btn')),
                         style: OutlinedButton.styleFrom(
                           foregroundColor: kOnSurface,
@@ -409,13 +410,11 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                 _card(
                   child: Column(
                     children: [
-                      const Icon(Icons.auto_awesome,
-                          size: 32, color: kAccent),
+                      const Icon(Icons.auto_awesome, size: 32, color: kAccent),
                       const SizedBox(height: 14),
                       Text(_loadMsg,
                           style: GoogleFonts.manrope(
-                              fontSize: 15,
-                              fontWeight: FontWeight.w700)),
+                              fontSize: 15, fontWeight: FontWeight.w700)),
                       const SizedBox(height: 4),
                       Text(s.get('loading_wait'),
                           style: const TextStyle(
@@ -448,11 +447,12 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                                 ['balanced', s.get('balanced')],
                                 ['detailed', s.get('detailed')],
                               ]
-                                  .map((v) => _chip(v[0], v[1],
-                                      _local.length == v[0], () {
-                                    setState(() => _local =
-                                        _local.copyWith(length: v[0]));
-                                  }))
+                                  .map((v) =>
+                                      _chip(v[0], v[1], _local.length == v[0],
+                                          () {
+                                        setState(() => _local =
+                                            _local.copyWith(length: v[0]));
+                                      }))
                                   .toList(),
                             ),
                             const SizedBox(height: 16),
@@ -466,11 +466,11 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                                 ['playful', s.get('playful')],
                                 ['academic', s.get('academic')],
                               ]
-                                  .map((v) => _chip(v[0], v[1],
-                                      _local.tone == v[0], () {
-                                    setState(() => _local =
-                                        _local.copyWith(tone: v[0]));
-                                  }))
+                                  .map((v) => _chip(
+                                          v[0], v[1], _local.tone == v[0], () {
+                                        setState(() => _local =
+                                            _local.copyWith(tone: v[0]));
+                                      }))
                                   .toList(),
                             ),
                           ],
@@ -492,15 +492,16 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                                 ['minimal', s.get('minimal')],
                                 ['vibrant', s.get('vibrant')],
                               ]
-                                  .map((v) => _chip(v[0], v[1],
-                                      _local.emoji == v[0], () {
-                                    setState(() => _local =
-                                        _local.copyWith(emoji: v[0]));
-                                  }))
+                                  .map((v) => _chip(
+                                          v[0], v[1], _local.emoji == v[0], () {
+                                        setState(() => _local =
+                                            _local.copyWith(emoji: v[0]));
+                                      }))
                                   .toList(),
                             ),
                             const SizedBox(height: 16),
-                            _sectionLabel(Icons.grid_view, s.get('template_label')),
+                            _sectionLabel(
+                                Icons.grid_view, s.get('template_label')),
                             const SizedBox(height: 10),
                             DropdownButton<String>(
                               value: _local.template,
@@ -508,8 +509,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
                               underline: const SizedBox(),
                               items: kTemplates
                                   .map((t) => DropdownMenuItem(
-                                      value: t.id,
-                                      child: Text(t.label)))
+                                      value: t.id, child: Text(t.label)))
                                   .toList(),
                               onChanged: (v) => setState(
                                   () => _local = _local.copyWith(template: v)),
@@ -556,8 +556,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
       GestureDetector(
         onTap: onTap,
         child: Container(
-          padding:
-              const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
           decoration: BoxDecoration(
             color: active ? kPrimary : kSurfaceLow,
             borderRadius: BorderRadius.circular(999),
@@ -571,8 +570,7 @@ class _NewReadmeScreenState extends State<NewReadmeScreen> {
       );
 
   Widget _badge(String label, Color bg, Color fg) => Container(
-        padding:
-            const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
         decoration:
             BoxDecoration(color: bg, borderRadius: BorderRadius.circular(999)),
         child: Text(label,

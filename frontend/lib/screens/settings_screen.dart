@@ -102,7 +102,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              _sectionLabel(Icons.segment, str.get('settings_length')),
+                              _sectionLabel(
+                                  Icons.segment, str.get('settings_length')),
                               _badgeIndigo(s.length),
                             ],
                           ),
@@ -153,7 +154,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _sectionLabel(Icons.smart_toy, str.get('settings_model')),
+                          _sectionLabel(
+                              Icons.smart_toy, str.get('settings_model')),
                           const SizedBox(height: 12),
                           ...kModels.map((m) => _ModelCard(
                                 model: m,
@@ -179,7 +181,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _sectionLabel(Icons.tune, str.get('settings_advanced')),
+                          _sectionLabel(
+                              Icons.tune, str.get('settings_advanced')),
                           const SizedBox(height: 16),
                           ...[
                             _ToggleOpt(
@@ -245,7 +248,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          _sectionLabel(Icons.record_voice_over, str.get('settings_tone')),
+                          _sectionLabel(Icons.record_voice_over,
+                              str.get('settings_tone')),
                           const SizedBox(height: 14),
                           Wrap(
                             spacing: 6,
@@ -300,14 +304,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
                                 fontWeight: FontWeight.w700,
                                 color: Colors.white)),
                         Text(str.get('settings_save_sub'),
-                            style:
-                                const TextStyle(fontSize: 12, color: Colors.white60)),
+                            style: const TextStyle(
+                                fontSize: 12, color: Colors.white60)),
                       ],
                     ),
                     ElevatedButton.icon(
                       onPressed: _save,
                       icon: Icon(_saved ? Icons.check : Icons.save, size: 15),
-                      label: Text(_saved ? str.get('settings_saved_btn') : str.get('settings_save_btn'),
+                      label: Text(
+                          _saved
+                              ? str.get('settings_saved_btn')
+                              : str.get('settings_save_btn'),
                           style:
                               GoogleFonts.manrope(fontWeight: FontWeight.w700)),
                       style: ElevatedButton.styleFrom(

@@ -106,6 +106,7 @@ class HistoryItem {
   final String url;
   final int timestamp;
   final bool saved;
+  final Map<String, dynamic> aiMeta;
 
   const HistoryItem({
     required this.readme,
@@ -115,6 +116,7 @@ class HistoryItem {
     required this.url,
     required this.timestamp,
     this.saved = false,
+    this.aiMeta = const {},
   });
 
   HistoryItem copyWith({
@@ -125,6 +127,7 @@ class HistoryItem {
     String? url,
     int? timestamp,
     bool? saved,
+    Map<String, dynamic>? aiMeta,
   }) =>
       HistoryItem(
         readme: readme ?? this.readme,
@@ -134,6 +137,7 @@ class HistoryItem {
         url: url ?? this.url,
         timestamp: timestamp ?? this.timestamp,
         saved: saved ?? this.saved,
+        aiMeta: aiMeta ?? this.aiMeta,
       );
 
   Map<String, dynamic> toJson() => {
@@ -144,6 +148,7 @@ class HistoryItem {
         'url': url,
         'timestamp': timestamp,
         'saved': saved,
+        'aiMeta': aiMeta,
       };
 
   factory HistoryItem.fromJson(Map<String, dynamic> json) => HistoryItem(
@@ -155,29 +160,26 @@ class HistoryItem {
         url: json['url'] ?? '',
         timestamp: json['timestamp'] ?? 0,
         saved: json['saved'] ?? false,
+        aiMeta: Map<String, dynamic>.from(json['aiMeta'] ?? {}),
       );
 }
 
 const kModels = [
   AiModel(
       id: 'gemini',
-      name: 'Gemini 1.5 Flash',
-      sub: 'Google · Activo',
+      name: 'Gemini 2.5 Flash',
+      sub: 'Google · Actiu',
       available: true),
+  AiModel(id: 'grok', name: 'Grok-3', sub: 'xAI · Actiu', available: true),
   AiModel(
-      id: 'gpt4',
-      name: 'GPT-4 Turbo',
-      sub: 'OpenAI · Próximamente',
-      available: false),
-  AiModel(
-      id: 'grok',
-      name: 'Grok-1',
-      sub: 'X.AI · Próximamente',
-      available: false),
+      id: 'claude',
+      name: 'Claude Haiku',
+      sub: 'Anthropic · Actiu',
+      available: true),
   AiModel(
       id: 'llama',
       name: 'Llama 3',
-      sub: 'Meta · Próximamente',
+      sub: 'Meta · Pròximament',
       available: false),
 ];
 

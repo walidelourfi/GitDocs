@@ -34,8 +34,7 @@ class SavedScreen extends StatelessWidget {
                     color: kOnSurfaceMuted)),
             const SizedBox(height: 4),
             Text(s.get('saved_empty_sub'),
-                style:
-                    const TextStyle(fontSize: 13, color: kOnSurfaceMuted)),
+                style: const TextStyle(fontSize: 13, color: kOnSurfaceMuted)),
           ],
         ),
       );
@@ -52,10 +51,8 @@ class SavedScreen extends StatelessWidget {
               Text(s.get('page_saved'),
                   style: GoogleFonts.manrope(
                       fontSize: 24, fontWeight: FontWeight.w800)),
-              Text(
-                  '${saved.length} README${saved.length != 1 ? 's' : ''}',
-                  style: const TextStyle(
-                      fontSize: 13, color: kOnSurfaceMuted)),
+              Text('${saved.length} README${saved.length != 1 ? 's' : ''}',
+                  style: const TextStyle(fontSize: 13, color: kOnSurfaceMuted)),
               const SizedBox(height: 24),
               ...saved.reversed.map((item) => _SavedCard(
                     item: item,
@@ -140,8 +137,7 @@ class _SavedCardState extends State<_SavedCard> {
                           ],
                         ),
                         const SizedBox(height: 4),
-                        Text(
-                            item.repoData['description'] ?? item.url,
+                        Text(item.repoData['description'] ?? item.url,
                             style: const TextStyle(
                                 fontSize: 12, color: kOnSurfaceMuted),
                             overflow: TextOverflow.ellipsis),
@@ -194,13 +190,11 @@ class _SavedCardState extends State<_SavedCard> {
   }
 
   Widget _badge(String label) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-        decoration: BoxDecoration(
-            color: kAccent.withOpacity(0.1),
-            borderRadius: BorderRadius.circular(999)),
-        child: Text(label,
-            style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: kAccent)));
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+      decoration: BoxDecoration(
+          color: kAccent.withOpacity(0.1),
+          borderRadius: BorderRadius.circular(999)),
+      child: Text(label,
+          style: const TextStyle(
+              fontSize: 10, fontWeight: FontWeight.w700, color: kAccent)));
 }

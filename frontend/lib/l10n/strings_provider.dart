@@ -17,5 +17,6 @@ class StringsProvider extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(StringsProvider old) => strings.langCode != old.strings.langCode;
+  bool updateShouldNotify(StringsProvider old) =>
+      strings.langCode != old.strings.langCode;
 }

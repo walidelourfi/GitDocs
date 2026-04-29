@@ -62,8 +62,7 @@ class _ResultScreenState extends State<ResultScreen> {
           ..sort((a, b) => (b.value as int).compareTo(a.value as int)))
         .take(4)
         .toList();
-    final total =
-        r.langData.values.fold<int>(0, (acc, v) => acc + (v as int));
+    final total = r.langData.values.fold<int>(0, (acc, v) => acc + (v as int));
 
     return SingleChildScrollView(
       padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
@@ -121,6 +120,68 @@ class _ResultScreenState extends State<ResultScreen> {
               ),
               const SizedBox(height: 20),
 
+              // AI parsed metadata (title, description, features...)
+              if (r.aiMeta.isNotEmpty) ...[
+                Container(
+                  padding: const EdgeInsets.all(16),
+                  decoration: BoxDecoration(
+                      color: kSurface,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [kIslandShadow]),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      if (r.aiMeta['title'] != null)
+                        Text(r.aiMeta['title'],
+                            style: headline(size: 18)),
+                      if (r.aiMeta['description'] != null) ...[
+                        const SizedBox(height: 6),
+                        Text(r.aiMeta['description'],
+                            style: const TextStyle(
+                                fontSize: 13, color: kOnSurfaceMuted)),
+                      ],
+                      const SizedBox(height: 10),
+                      if (r.aiMeta['key_features'] is List &&
+                          (r.aiMeta['key_features'] as List).isNotEmpty)
+                        Wrap(
+                          spacing: 8,
+                          runSpacing: 6,
+                          children: (r.aiMeta['key_features'] as List)
+                              .map<Widget>((f) => Container(
+                                    padding: const EdgeInsets.symmetric(
+                                        horizontal: 9, vertical: 6),
+                                    decoration: BoxDecoration(
+                                        color:
+                                            kSurfaceLow, // subtle chip
+                                        borderRadius: BorderRadius.circular(8)),
+                                    child: Text(f.toString(),
+                                        style: const TextStyle(fontSize: 12)),
+                                  ))
+                              .toList(),
+                        ),
+                      if (r.aiMeta['tech_stack'] is List &&
+                          (r.aiMeta['tech_stack'] as List).isNotEmpty) ...[
+                        const SizedBox(height: 8),
+                        Wrap(
+                          spacing: 6,
+                          children: (r.aiMeta['tech_stack'] as List)
+                              .map<Widget>((t) => _badge(t.toString()))
+                              .toList(),
+                        ),
+                      ],
+                      if (r.aiMeta['complexity'] != null) ...[
+                        const SizedBox(height: 8),
+                        Text('Complexity: ${r.aiMeta['complexity']}',
+                            style: const TextStyle(
+                                fontSize: 12, color: kOnSurfaceMuted)),
+                      ],
+                    ],
+                  ),
+                ),
+
+                const SizedBox(height: 12),
+              ],
+
               // Stats
               if (r.repoData.isNotEmpty && r.repoData.length > 1)
                 Wrap(
@@ -131,11 +192,11 @@ class _ResultScreenState extends State<ResultScreen> {
                       _stat(Icons.star_outline,
                           '${r.repoData['stargazers_count']}', 'Stars'),
                     if (r.repoData['forks_count'] != null)
-                      _stat(Icons.fork_right,
-                          '${r.repoData['forks_count']}', 'Forks'),
+                      _stat(Icons.fork_right, '${r.repoData['forks_count']}',
+                          'Forks'),
                     if (r.repoData['watchers_count'] != null)
-                      _stat(Icons.visibility,
-                          '${r.repoData['watchers_count']}', 'Watchers'),
+                      _stat(Icons.visibility, '${r.repoData['watchers_count']}',
+                          'Watchers'),
                     if (r.repoData['open_issues_count'] != null)
                       _stat(Icons.bug_report,
                           '${r.repoData['open_issues_count']}', 'Issues'),
@@ -205,8 +266,7 @@ class _ResultScreenState extends State<ResultScreen> {
                                 const SizedBox(width: 6),
                                 Text(alt ?? uri.toString(),
                                     style: const TextStyle(
-                                        fontSize: 11,
-                                        color: kOnSurfaceFaint)),
+                                        fontSize: 11, color: kOnSurfaceFaint)),
                               ],
                             ),
                           ),
@@ -271,27 +331,26 @@ class _ResultScreenState extends State<ResultScreen> {
             Icon(icon, size: 15, color: kOnSurfaceMuted),
             const SizedBox(width: 6),
             Text(val,
-                style: const TextStyle(
-                    fontWeight: FontWeight.w700, fontSize: 14)),
+                style:
+                    const TextStyle(fontWeight: FontWeight.w700, fontSize: 14)),
             const SizedBox(width: 4),
             Text(label,
-                style: const TextStyle(
-                    fontSize: 12, color: kOnSurfaceMuted)),
+                style: const TextStyle(fontSize: 12, color: kOnSurfaceMuted)),
           ],
         ),
       );
 
   Widget _badge(String label) => Container(
-        padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
-        decoration: BoxDecoration(
-            color: kAccent.withValues(alpha: 0.1),
-            borderRadius: BorderRadius.circular(999)),
-        child: Text(label,
-            style: const TextStyle(
-                fontSize: 10,
-                fontWeight: FontWeight.w700,
-                color: kAccent,
-                letterSpacing: 0.8)));
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
+      decoration: BoxDecoration(
+          color: kAccent.withValues(alpha: 0.1),
+          borderRadius: BorderRadius.circular(999)),
+      child: Text(label,
+          style: const TextStyle(
+              fontSize: 10,
+              fontWeight: FontWeight.w700,
+              color: kAccent,
+              letterSpacing: 0.8)));
 
   Widget _outBtn(
           IconData icon, String label, Color? color, VoidCallback onTap) =>
@@ -371,11 +430,9 @@ class _CodeBlockState extends State<_CodeBlock> {
         children: [
           // Header: language + copy button
           Container(
-            padding:
-                const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 9),
             decoration: const BoxDecoration(
-              border:
-                  Border(bottom: BorderSide(color: Color(0xFF21262D))),
+              border: Border(bottom: BorderSide(color: Color(0xFF21262D))),
               borderRadius: BorderRadius.vertical(top: Radius.circular(10)),
             ),
             child: Row(

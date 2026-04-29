@@ -39,20 +39,18 @@ class TemplatesScreen extends StatelessWidget {
               GridView.builder(
                 shrinkWrap: true,
                 physics: const NeverScrollableScrollPhysics(),
-                gridDelegate:
-                    const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 14,
                   mainAxisSpacing: 14,
                   childAspectRatio: 1.6,
                 ),
                 itemCount: kTemplates.length,
-                itemBuilder: (_, i) =>
-                    _TemplateCard(
-                      template: kTemplates[i],
-                      iconData: _iconMap[kTemplates[i].icon] ?? Icons.article,
-                      onTap: () => onSelectTemplate(kTemplates[i].id),
-                    ),
+                itemBuilder: (_, i) => _TemplateCard(
+                  template: kTemplates[i],
+                  iconData: _iconMap[kTemplates[i].icon] ?? Icons.article,
+                  onTap: () => onSelectTemplate(kTemplates[i].id),
+                ),
               ),
             ],
           ),
@@ -68,9 +66,7 @@ class _TemplateCard extends StatefulWidget {
   final VoidCallback onTap;
 
   const _TemplateCard(
-      {required this.template,
-      required this.iconData,
-      required this.onTap});
+      {required this.template, required this.iconData, required this.onTap});
 
   @override
   State<_TemplateCard> createState() => _TemplateCardState();
@@ -105,8 +101,7 @@ class _TemplateCardState extends State<_TemplateCard> {
                     decoration: BoxDecoration(
                         color: kSurfaceLow,
                         borderRadius: BorderRadius.circular(10)),
-                    child: Icon(widget.iconData,
-                        size: 20, color: kPrimary),
+                    child: Icon(widget.iconData, size: 20, color: kPrimary),
                   ),
                   const SizedBox(width: 12),
                   Text(widget.template.label,
