@@ -1,0 +1,9 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/gitdocs_dev
+    username: ${DB_USER:postgres}
+    password: ${DB_PASS:postgres}
+
+logging:
+  level:
+    com.gitdocs: DEBUG
